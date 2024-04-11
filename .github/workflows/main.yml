@@ -1,4 +1,4 @@
-name: Build PHP binaries
+name: Build PHP7 binaries
 
 on:
     push:
@@ -20,7 +20,7 @@ jobs:
         id: cpu-cores
 
       - name: Clone musl-cross-make repository
-        run: git clone https://github.com/TukangM/musl-cross-make
+        run: git clone https://github.com/pmmp/musl-cross-make
 
       - name: Install tools and dependencies for musl-cross-make and install musl-cross-make binary
         run: |
@@ -35,20 +35,20 @@ jobs:
       - name: wget compile.sh and compile and tar.gz or achive the binary
         run: |
           pwd
-          wget https://raw.githubusercontent.com/Imperial-Devs/php8-aarch64-builds/main/compile.sh -O compile.sh
+          wget https://raw.githubusercontent.com/Imperial-Devs/php8-aarch64-builds/php7-test/compile.sh -O compile.sh
           bash compile.sh -t android-aarch64 -x -j${{ steps.cpu-cores.outputs.count }} -P5 -D
           pwd
-          tar -czf ./PHP-Linux-aarch64-PM5.tar.gz bin
-          tar -czf ./PHP-Linux-aarch64-PM5-debugging-symbols.tar.gz bin-debug
+          tar -czf ./PHP-Linux-aarch64-PHP7.tar.gz bin
+          tar -czf ./PHP-Linux-aarch64-PHP7-debugging-symbols.tar.gz bin-debug
 
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: Linux-aarch64-PM5
+          name: Linux-aarch64-PHP7
           path: |
-            ./PHP-Linux-aarch64-PM5*.tar.gz
+            ./PHP-Linux-aarch64-PHP7*.tar.gz
             install.log
             compile.sh
           if-no-files-found: error
