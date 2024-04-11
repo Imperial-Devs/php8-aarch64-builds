@@ -20,7 +20,7 @@ jobs:
         id: cpu-cores
 
       - name: Clone musl-cross-make repository
-        run: git clone https://github.com/pmmp/musl-cross-make
+        run: git clone https://github.com/TukangM/musl-cross-make
 
       - name: Install tools and dependencies for musl-cross-make and install musl-cross-make binary
         run: |
