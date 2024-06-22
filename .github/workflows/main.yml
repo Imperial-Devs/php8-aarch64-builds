@@ -80,7 +80,7 @@ jobs:
         run: |
           pwd
           wget https://raw.githubusercontent.com/Imperial-Devs/php8-aarch64-builds/main/compileP4.sh -O compile.sh
-          bash compile.sh -t android-aarch64 -g -x -j${{ steps.cpu-cores.outputs.count }} -P4 -D
+          bash compile.sh -t android-aarch64 -g -x -j${{ steps.cpu-cores.outputs.count }} -P4
           pwd
           tar -czf ./PHP-Linux-aarch64-PM4.tar.gz bin
           tar -czf ./PHP-Linux-aarch64-PM4-debugging-symbols.tar.gz bin-debug
