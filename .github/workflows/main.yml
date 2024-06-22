@@ -8,7 +8,7 @@ on:
     workflow_dispatch:
 
 jobs:
-  linux:
+  linux-PM5:
     name: Linux
     runs-on: ubuntu-22.04
 
@@ -36,7 +36,7 @@ jobs:
         run: |
           pwd
           wget https://raw.githubusercontent.com/Imperial-Devs/php8-aarch64-builds/main/compile.sh -O compile.sh
-          bash compile.sh -t android-aarch64 -x -j${{ steps.cpu-cores.outputs.count }} -P5 -D
+          bash compile.sh -t android-aarch64 -g -x -j${{ steps.cpu-cores.outputs.count }} -P5 -D
           pwd
           tar -czf ./PHP-Linux-aarch64-PM5.tar.gz bin
           tar -czf ./PHP-Linux-aarch64-PM5-debugging-symbols.tar.gz bin-debug
@@ -49,6 +49,50 @@ jobs:
           name: Linux-aarch64-PM5
           path: |
             ./PHP-Linux-aarch64-PM5*.tar.gz
+            install.log
+            compile.sh
+          if-no-files-found: error
+  linux-PM4:
+    name: Linux
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v2
+        id: cpu-cores
+
+      - name: Clone musl-cross-make repository
+        run: git clone https://github.com/TukangM/musl-cross-make
+
+      - name: Install tools and dependencies for musl-cross-make and install musl-cross-make binary
+        run: |
+          cd musl-cross-make
+          sudo apt-get update
+          sudo apt-get install make autoconf automake libtool m4 wget gzip bzip2 bison g++ git cmake pkg-config re2c
+          sudo apt-get install libtool-bin
+          sudo make install -j${{ steps.cpu-cores.outputs.count }}
+          cd ..
+          
+
+      - name: wget compile.sh and compile and tar.gz or achive the binary
+        run: |
+          pwd
+          wget https://raw.githubusercontent.com/Imperial-Devs/php8-aarch64-builds/main/compile.sh -O compile.sh
+          bash compile.sh -t android-aarch64 -g -x -j${{ steps.cpu-cores.outputs.count }} -P4 -D
+          pwd
+          tar -czf ./PHP-Linux-aarch64-PM4.tar.gz bin
+          tar -czf ./PHP-Linux-aarch64-PM4-debugging-symbols.tar.gz bin-debug
+
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Linux-aarch64-PM4
+          path: |
+            ./PHP-Linux-aarch64-PM4*.tar.gz
             install.log
             compile.sh
           if-no-files-found: error
