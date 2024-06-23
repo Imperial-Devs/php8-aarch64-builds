@@ -35,7 +35,7 @@ jobs:
       - name: wget compile.sh and compile and tar.gz or achive the binary
         run: |
           pwd
-          wget https://raw.githubusercontent.com/Imperial-Devs/php8-aarch64-builds/main/compileP4.sh -O compile.sh
+          wget https://raw.githubusercontent.com/Imperial-Devs/php8-aarch64-builds/test-php-8.1-latest/compileP4.sh -O compile.sh
           bash compile.sh -t android-aarch64 -g -x -j${{ steps.cpu-cores.outputs.count }} -P4 -D
           pwd
           tar -czf ./PHP-Linux-aarch64-PM4.tar.gz bin
